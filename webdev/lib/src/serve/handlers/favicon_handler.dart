@@ -10,7 +10,12 @@ import 'package:shelf/shelf.dart';
 
 Handler interceptFavicon(Handler handler) {
   return (request) async {
-    final response = await handler(request);
+    var response = await handler(request);
+    response = response.change(headers: {...response.headers, 
+    "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp"
+    });;
+    
     if (response.statusCode == 404 &&
         request.url.pathSegments.isNotEmpty &&
         request.url.pathSegments.last == 'favicon.ico') {
